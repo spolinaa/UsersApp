@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
 using UsersApp;
 using Users.Models;
-using System.Text.Json;
 
 namespace UsersTests
 {

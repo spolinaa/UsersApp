@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UsersApp", "UsersApp.csproj", "{21FF5FC9-7EF5-43CE-B3FC-BE752590BD6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UsersApp", "src\Users\UsersApp.csproj", "{21FF5FC9-7EF5-43CE-B3FC-BE752590BD6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsersAppTests", "..\UsersTests\UsersAppTests.csproj", "{024398AE-FB9B-479C-B747-DB9CFD67F725}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsersAppTests", "tests\UsersTests\UsersAppTests.csproj", "{024398AE-FB9B-479C-B747-DB9CFD67F725}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
