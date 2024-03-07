@@ -6,23 +6,8 @@ using System.Text.Json;
 
 namespace UsersTests
 {
-    public static class UserExtension
-    {
-        public static bool Equals(this User user, User other)
-        {
-            return true;
-        }
-    }
-
     public class UsersAppTests
     {
-        public enum TestResults
-        {
-            Ok,
-            NotFound,
-            BadRequest
-        }
-
         private ApplicationContext dbContext;
         private UsersDb usersDb;
 
@@ -35,7 +20,6 @@ namespace UsersTests
         private Func<int, string> userNameFun = x => $"user{x}";
         private Func<int, string> userEmailFun = x => $"user{x}@mail.ru";
 
-
         [SetUp]
         public void Setup()
         {
@@ -44,16 +28,6 @@ namespace UsersTests
             dbContext.Database.EnsureCreated();
 
             usersDb = new UsersDb(dbContext);
-        }
-
-        public void RunTest(Func<IResult> test, TestResults result, string? resultValue, Action checkGet)
-        {
-            var expected = GetResult(result, resultValue);
-            var actual = test();
-            Assert.That(expected, Is.EqualTo(actual));
-
-            if (expected == Results.Ok())
-                checkGet();
         }
 
         public void CheckGet(IResult expected)
@@ -181,15 +155,6 @@ namespace UsersTests
         {
             for (int i = 0; i < 5; i++)
                 usersDb.Add(userNameFun(i), userEmailFun(i));
-        }
-
-        private IResult GetResult<T>(TestResults result, T? value)
-        {
-            if (result == TestResults.Ok)
-                return Results.Ok(value);
-            if (result == TestResults.BadRequest)
-                return Results.BadRequest(value);
-            return Results.NotFound(value);
         }
 
         private void CheckEquals(IResult actual, IResult expected) =>
