@@ -11,7 +11,6 @@ namespace UsersApp
             Database.EnsureCreated();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-            optionsBuilder.UseSqlite($"Data Source=users.db");
+            optionsBuilder.UseSqlite("Data Source=users.db");
     }
 }
-
