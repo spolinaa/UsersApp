@@ -7,10 +7,8 @@ namespace UsersApp
     {
         private ApplicationContext db;
 
-        public UsersDb(ApplicationContext appContext)
-        {
+        public UsersDb(ApplicationContext appContext) =>
             db = appContext;
-        }
 
         public IResult Add(string name, string email)
         {
@@ -30,8 +28,7 @@ namespace UsersApp
                 : Results.NotFound(UsersError.NoUserWithSuchId);
         }
 
-        public IResult Get()
-            => Results.Ok(db.Users.ToList());
+        public IResult Get() => Results.Ok(db.Users.ToList());
 
         public IResult Update(int id, string name, string email)
         {

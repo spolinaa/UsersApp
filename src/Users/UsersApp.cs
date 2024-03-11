@@ -15,7 +15,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-UsersDb users = new UsersDb(new ApplicationContext());
+UsersDb users = new UsersDb(new ApplicationContext(DbSource.PROD));
 
 app.MapGet("/users", () => users.Get())
 .WithName("GetUsers")

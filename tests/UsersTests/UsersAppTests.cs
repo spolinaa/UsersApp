@@ -15,6 +15,7 @@ namespace UsersTests
         private const string invalidEmail = "wrong format email";
         private const int userId = 1;
         private const int nonExistentId = 156;
+        private const int negativeId = -15;
 
         private Func<int, string> userNameFun = x => $"user{x}";
         private Func<int, string> userEmailFun = x => $"user{x}@mail.ru";
@@ -22,7 +23,7 @@ namespace UsersTests
         [SetUp]
         public void Setup()
         {
-            dbContext = new ApplicationContext();
+            dbContext = new ApplicationContext(DbSource.TEST);
             dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
 
@@ -62,8 +63,8 @@ namespace UsersTests
         public void AddAndGetMultipleUsersTest()
         {
             var users = Enumerable
-                .Range(0, 5)
-                .Select(x => new User { Id = x + 1, Name = userNameFun(x), Email = userEmailFun(x) })
+                .Range(1, nonExistentId - 1)
+                .Select(x => new User { Id = x, Name = userNameFun(x), Email = userEmailFun(x) })
                 .ToList();
 
             AddUsers();
@@ -79,9 +80,13 @@ namespace UsersTests
         [Test]
         public void GetUserWithNonExistentId()
         {
-            CheckGet(userId, Results.NotFound(UsersError.NoUserWithSuchId));
+            var expected = Results.NotFound(UsersError.NoUserWithSuchId);
+            CheckGet(userId, expected);
+
             AddUsers();
-            CheckGet(nonExistentId, Results.NotFound(UsersError.NoUserWithSuchId));
+
+            CheckGet(nonExistentId, expected);
+            CheckGet(negativeId, expected);
         }
 
         [Test]
@@ -90,8 +95,8 @@ namespace UsersTests
             AddUser();
 
             var newName = "test_name";
-            var updateResult = usersDb.Update(userId, newName, email);
-            Assert.That(updateResult, Is.EqualTo(Results.Ok()));
+            var actual = usersDb.Update(userId, newName, email);
+            CheckEquals(actual, Results.Ok());
 
             var user = new User { Id = userId, Name = newName, Email = email };
             CheckGet(userId, Results.Ok(user));
@@ -110,13 +115,17 @@ namespace UsersTests
         [Test]
         public void UpdateUserWithNonExistentId()
         {
+            var expected = Results.NotFound(UsersError.NoUserWithSuchId);
             var actual = usersDb.Update(userId, userName, email);
-            CheckEquals(actual, Results.NotFound(UsersError.NoUserWithSuchId));
+            CheckEquals(actual, expected);
 
-            AddUser();
+            AddUsers();
 
             actual = usersDb.Update(nonExistentId, userName, email);
-            CheckEquals(actual, Results.NotFound(UsersError.NoUserWithSuchId));
+            CheckEquals(actual, expected);
+
+            actual = usersDb.Update(negativeId, userName, email);
+            CheckEquals(actual, expected);
         }
 
         [Test]
@@ -145,6 +154,9 @@ namespace UsersTests
 
             actual = usersDb.Delete(nonExistentId);
             CheckEquals(actual, expected);
+
+            actual = usersDb.Delete(negativeId);
+            CheckEquals(actual, expected);
         }
 
         private void AddUser() =>
@@ -152,7 +164,7 @@ namespace UsersTests
 
         private void AddUsers()
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 1; i < nonExistentId; i++)
                 usersDb.Add(userNameFun(i), userEmailFun(i));
         }
 
