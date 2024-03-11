@@ -1,6 +1,6 @@
 # UsersApp
 
-[![Build Status](https://github.com/spolinaa/UsersApp/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://travis-ci.org/joemccann/dillinger)
+[![.NET](https://github.com/spolinaa/UsersApp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/spolinaa/UsersApp/actions/workflows/dotnet.yml)
 
 REST API приложение по работе с пользователями. Поддерживаемые операции:
 - Добавление/удаление/редактирование пользователя
