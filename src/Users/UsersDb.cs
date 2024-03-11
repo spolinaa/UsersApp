@@ -17,7 +17,13 @@ namespace UsersApp
 
             db.Add(new User { Name = name, Email = email });
             db.SaveChanges();
-            return Results.Ok();
+
+            var user = db.Users
+                .OrderByDescending(x => x.Id)
+                .FirstOrDefault();
+            return user != null
+                ? Results.Ok(user)
+                : Results.NotFound();
         }
 
         public IResult Get(int id)
@@ -43,7 +49,7 @@ namespace UsersApp
             user.Email = email;
             db.Update(user);
             db.SaveChanges();
-            return Results.Ok();
+            return Results.Ok(user);
         }
 
         public IResult Delete(int id)
@@ -54,7 +60,7 @@ namespace UsersApp
 
             db.Users.Remove(user);
             db.SaveChanges();
-            return Results.Ok();
+            return Results.NoContent();
         }
 
         private User? GetUserById(int id) => 
