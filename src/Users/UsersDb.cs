@@ -18,12 +18,8 @@ namespace UsersApp
             db.Add(new User { Name = name, Email = email });
             db.SaveChanges();
 
-            var user = db.Users
-                .OrderByDescending(x => x.Id)
-                .FirstOrDefault();
-            return user != null
-                ? Results.Ok(user)
-                : Results.NotFound();
+            var userId = db.Users.Max(x => x.Id);
+            return Results.Ok(userId);
         }
 
         public IResult Get(int id)
@@ -36,17 +32,20 @@ namespace UsersApp
 
         public IResult Get() => Results.Ok(db.Users.ToList());
 
-        public IResult Update(int id, string name, string email)
+        public IResult Update(int id, string? name, string? email)
         {
-            if (!IsValidEmail(email))
+            if (email != null && !IsValidEmail(email))
                 return Results.BadRequest(UsersError.InvalidEmailFormat);
 
             var user = GetUserById(id);
             if (user == null)
                 return Results.NotFound(UsersError.NoUserWithSuchId);
 
-            user.Name = name;
-            user.Email = email;
+            if (name == null && user == null)
+                return Results.Ok(user);
+
+            user.Name = name ?? user.Name;
+            user.Email = email ?? user.Email;
             db.Update(user);
             db.SaveChanges();
             return Results.Ok(user);

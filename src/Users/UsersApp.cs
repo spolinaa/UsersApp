@@ -41,7 +41,7 @@ app.MapGet("/user", (int id) => users.Get(id))
 app.MapPost("/user", (string name, string email) => users.Add(name, email))
 .WithName("AddUser")
 .WithSummary("Добавить пользователя")
-.WithDescription("Добавить нового пользователя.")
+.WithDescription("Добавить нового пользователя. Возвращает id добавленного пользователя.")
 .Produces(StatusCodes.Status200OK)
 .Produces(StatusCodes.Status400BadRequest)
 .WithOpenApi(operation =>
@@ -51,10 +51,10 @@ app.MapPost("/user", (string name, string email) => users.Add(name, email))
     return operation;
 });
 
-app.MapPut("/user", (int id, string name, string email) => users.Update(id, name, email))
+app.MapPatch("/user", (int id, string? name, string? email) => users.Update(id, name, email))
 .WithName("UpdateUser")
 .WithSummary("Редактировать существующего пользователя")
-.WithDescription("Редактировать существующего пользователя по id.")
+.WithDescription("Редактировать имя и/или электронную почту пользователя по id. Возвращает отредактированного пользователя.")
 .Produces(StatusCodes.Status200OK)
 .Produces(StatusCodes.Status404NotFound)
 .WithOpenApi(operation =>
