@@ -1,4 +1,3 @@
-using Microsoft.OpenApi.Models;
 using UsersApp;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,13 +6,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 var userNotFound = "Пользователь не найден";
@@ -24,7 +18,6 @@ app.MapGet("/users", () => users.Get())
 .WithSummary("Получить всех пользователей")
 .WithDescription("Возвращает массив пользователей.")
 .WithOpenApi();
-
 
 app.MapGet("/user", (int id) => users.Get(id))
 .WithName("GetUser")

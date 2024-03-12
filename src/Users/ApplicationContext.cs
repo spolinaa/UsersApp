@@ -16,10 +16,8 @@ namespace UsersApp
             
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string sourcePath = Source == DbSource.PROD 
-                ? "../data/users.db" 
-                : "test.db";
-            optionsBuilder.UseSqlite($"Data Source={sourcePath}");
+            string sourceName = Source == DbSource.PROD ? "users" : "test";
+            optionsBuilder.UseSqlite($"Data Source={sourceName}.db");
         }
     }
 }
